@@ -57,7 +57,7 @@ pipeline {
       } 
     }
     stage("build") {
-      input {
+      abc = input {
           message "Should we continue?"
           ok "Yes, we should."
           submitter "alice,bob"
@@ -67,6 +67,7 @@ pipeline {
       }
       steps {
           echo "Hello, ${PERSON}, nice to meet you."
+          echo "ok, ${abc}"
       }
     }
     stage('Create .pypirc') {
