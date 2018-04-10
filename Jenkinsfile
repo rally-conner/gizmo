@@ -6,6 +6,13 @@ def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo-playground'
 Robot robot = new Robot()
 
+/*
+
+
+
+
+
+*/
 
 
 pipeline {
@@ -19,8 +26,8 @@ pipeline {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
     }
   parameters {
-    choice(name: 'release', choice: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
-    choice(name: 'build_type', choice: 'SNAPSHOT\nRELEASE', description: 'Build type')
+    choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
+    choice(name: 'build_type', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
     }
   stages {
@@ -48,7 +55,9 @@ pipeline {
     }
     stage('Create .pypirc') {
       steps {
-        robot.setPypirc()
+        script {
+          robot.setPypirc()
+        }
       }
       post {
         always {
@@ -64,7 +73,9 @@ pipeline {
              repoNameToBuild = "${params.userInput}"
         }
         withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.userInput}", ARTI_REPO_NAME="${repoNameToBuild}"]){
-          robot.execPythonSetup()
+          script {
+            robot.execPythonSetup()
+          }
         }
       }
     }
