@@ -67,10 +67,12 @@ pipeline {
     }
     stage('Build: run setup.py and push AF'){
       steps {
-        if ("${params.build_type}" == "SNAPSHOT"){
+        script {
+          if ("${params.build_type}" == "SNAPSHOT"){
             repoNameToBuild = "${params.userInput}_${params.build_type}"
-        } else {
-             repoNameToBuild = "${params.userInput}"
+            } else {
+            repoNameToBuild = "${params.userInput}"
+          }
         }
         withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.userInput}", ARTI_REPO_NAME="${repoNameToBuild}"]){
           script {
