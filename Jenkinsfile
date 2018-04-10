@@ -8,7 +8,21 @@ Robot robot = new Robot()
 
 /*
 
-
+    stage("build") {
+      steps {
+        echo "i am in build step"
+        script {
+          def userInput = input(
+            id: 'userInput', message: 'Please give the folder?', parameters: [
+            [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
+          )
+          echo "show me the input ${userInput}"
+        }
+        echo "i m in build 2 now"
+        echo "${userInput}"
+        echo "check check"
+      }
+    }
 
 
 
@@ -43,19 +57,19 @@ pipeline {
       } 
     }
     stage("build") {
-      steps {
-        echo "i am in build step"
-        script {
-          def userInput = input(
-            id: 'userInput', message: 'Please give the folder?', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
-          )
-          echo "show me the input ${userInput}"
+        stage('Example') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "alice,bob"
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                }
+            }
+            steps {
+                echo "Hello, ${PERSON}, nice to meet you."
+            }
         }
-        echo "i m in build 2 now"
-        echo "${userInput}"
-        echo "check check"
-      }
     }
     stage('Create .pypirc') {
       steps {
