@@ -22,11 +22,6 @@ pipeline {
     choice(name: 'release', choice: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'build_type', choice: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
-    def userInput = input(
-        id: 'userInput', message: 'Please give the folder?', parameters: [
-        [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']
-        ]
-        )
     }
   stages {
     stage('Checkout SCM') {
@@ -40,6 +35,12 @@ pipeline {
         ]
       } 
     }
+    stage'Get User Input'
+    def userInput = input(
+      id: 'userInput', message: 'Please give the folder?', parameters: [
+      [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
+      )
+    echo ("Env: "+userInput)
     stage('Create .pypirc')
       steps {
         robot.setPypirc()
