@@ -43,6 +43,7 @@ pipeline {
     choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'build_type', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
+    choice(name: 'build_folder', choices: 'shared_library\ntool1', description: 'Give folder to be built')
     }
   stages {
     stage('Checkout SCM') {
@@ -73,12 +74,16 @@ pipeline {
     stage('Create .pypirc') {
       steps {
         script {
+          echo "test me test me"
           robot.setPypirc()
+          echo "test you test you"
         }
       }
       post {
         always {
+          script {
             sh "cat  ~/.pypirc"
+          }
         }
       }
     }
@@ -86,12 +91,12 @@ pipeline {
       steps {
         script {
           if ("${params.build_type}" == "SNAPSHOT"){
-            repoNameToBuild = "${params.userInput}_${params.build_type}"
+            repoNameToBuild = "${params.build_folder}_${params.build_type}"
             } else {
-            repoNameToBuild = "${params.userInput}"
+            repoNameToBuild = "${params.build_folder}"
           }
         }
-        withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.userInput}", ARTI_REPO_NAME="${repoNameToBuild}"]){
+        withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.build_folder}", ARTI_REPO_NAME="${repoNameToBuild}"]){
           script {
             robot.execPythonSetup()
           }
