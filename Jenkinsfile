@@ -45,12 +45,15 @@ pipeline {
           repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local
           username: $ARTIFACTORY_USER
           password: $ARTIFACTORY_PASSWORD' > ~/.pypirc
-          cat ~/.pypirc
         """.trim()
       }
     }
     stage('Build: run setup.py and push AF'){
       steps {
+        sh """
+          cat ~/.pypirc
+          echo 'test me test you'
+        """.trim()
         script {
           if ("${params.build_type}" == "SNAPSHOT"){
             repoNameToBuild = "${params.build_folder}_${params.build_type}"
