@@ -7,25 +7,26 @@ String serviceName = 'gizmo-playground'
 Robot robot = new Robot()
 
 
+
 pipeline {
   agent {
     node {
       label 'Pipeline_CI'
       customWorkspace "${serviceName}"
-      def userInput = input(
-        id: 'userInput', message: 'Please give the folder?', parameters: [
-        [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']
-        ]
-        )
     }
   }
   environment {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
     }
   parameters {
-    choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
+    choice(name: 'release', choice: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'build_type', choice: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
+    def userInput = input(
+        id: 'userInput', message: 'Please give the folder?', parameters: [
+        [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']
+        ]
+        )
     }
   stages {
     stage('Checkout SCM') {
