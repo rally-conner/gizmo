@@ -35,12 +35,16 @@ pipeline {
         ]
       } 
     }
-    stage'Get User Input'
-    def userInput = input(
-      id: 'userInput', message: 'Please give the folder?', parameters: [
-      [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
-      )
-    echo ("Env: "+userInput)
+    stage("build")
+      steps {
+        script {
+          def userInput = input(
+            id: 'userInput', message: 'Please give the folder?', parameters: [
+            [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
+          )
+        }
+        echo ("Env: "+userInput)
+      }
     stage('Create .pypirc')
       steps {
         robot.setPypirc()
