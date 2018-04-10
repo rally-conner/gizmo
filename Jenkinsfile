@@ -50,6 +50,7 @@ pipeline {
             id: 'userInput', message: 'Please give the folder?', parameters: [
             [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
           )
+          echo "show me the input ${userInput}"
         }
         echo "i m in build 2 now"
         echo "${params.userInput}"
