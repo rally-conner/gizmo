@@ -35,7 +35,7 @@ pipeline {
         ]
       } 
     }
-    stage("build")
+    stage("build") {
       steps {
         script {
           def userInput = input(
@@ -45,7 +45,8 @@ pipeline {
         }
         echo ("Env: "+userInput)
       }
-    stage('Create .pypirc')
+    }
+    stage('Create .pypirc') {
       steps {
         robot.setPypirc()
       }
@@ -54,7 +55,8 @@ pipeline {
             sh "cat  ~/.pypirc"
         }
       }
-    stage('Build: run setup.py and push AF')
+    }
+    stage('Build: run setup.py and push AF'){
       steps {
         if ("${params.build_type}" == "SNAPSHOT"){
             repoNameToBuild = "${params.userInput}_${params.build_type}"
@@ -65,5 +67,6 @@ pipeline {
           robot.execPythonSetup()
         }
       }
+    }
   }
 }
