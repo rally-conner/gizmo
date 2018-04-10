@@ -6,27 +6,6 @@ def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo-playground'
 Robot robot = new Robot()
 
-/*
-
-    stage("build") {
-      steps {
-        echo "i am in build step"
-        script {
-          def userInput = input(
-            id: 'userInput', message: 'Please give the folder?', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
-          )
-          echo "show me the input ${userInput}"
-        }
-        echo "i m in build 2 now"
-        echo "${userInput}"
-        echo "check check"
-      }
-    }
-
-
-
-*/
 
 
 pipeline {
@@ -58,19 +37,16 @@ pipeline {
       } 
     }
     stage('Create .pypirc') {
-      steps {
-        script {
-          echo "test me test me"
-          robot.setPypirc()
-          echo "test you test you"
-        }
-      }
-      post {
-        always {
-          script {
-            sh "cat  ~/.pypirc"
-          }
-        }
+      steps{
+        sh """
+          echo '[distutils]
+          index-servers = rallyhealth
+          [rallyhealth]
+          repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local
+          username: $ARTIFACTORY_USER
+          password: $ARTIFACTORY_PASSWORD' > ~/.pypirc
+          cat ~/.pypirc
+        """.trim()
       }
     }
     stage('Build: run setup.py and push AF'){
