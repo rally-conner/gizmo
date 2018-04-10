@@ -44,13 +44,14 @@ pipeline {
     }
     stage("build") {
       steps {
+        echo "i am in build step"
         script {
           def userInput = input(
             id: 'userInput', message: 'Please give the folder?', parameters: [
             [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
           )
         }
-        echo ("Env: "+userInput)
+        echo "Env: $userInput"
       }
     }
     stage('Create .pypirc') {
