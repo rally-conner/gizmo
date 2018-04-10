@@ -51,6 +51,7 @@ pipeline {
             [$class: 'TextParameterDefinition', defaultValue: 'Tool1', description: 'Package Name to build', name: 'folder_name']]
           )
         }
+        echo "i m in build 2 now"
         echo "Env: $userInput"
       }
     }
