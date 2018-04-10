@@ -52,8 +52,8 @@ pipeline {
           )
         }
         echo "i m in build 2 now"
-        abc = "${params.userInput}"
-        echo "$abc"
+        MYNAME="${params.userInput}"
+        echo "$MYNAME"
         echo "check check"
       }
     }
