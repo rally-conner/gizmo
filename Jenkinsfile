@@ -52,7 +52,9 @@ pipeline {
           )
         }
         echo "i m in build 2 now"
-        echo "Env: $userInput"
+        abc = "${params.userInput}"
+        echo "$abc"
+        echo "check check"
       }
     }
     stage('Create .pypirc') {
