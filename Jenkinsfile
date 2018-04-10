@@ -53,7 +53,7 @@ pipeline {
           echo "show me the input ${userInput}"
         }
         echo "i m in build 2 now"
-        echo "${params.userInput}"
+        echo "${userInput}"
         echo "check check"
       }
     }
