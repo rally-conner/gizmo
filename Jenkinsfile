@@ -62,7 +62,7 @@ pipeline {
         sh """
           echo ${repoNameToBuild}
           echo $BUILD_FOLDER
-          abc=$(find . -name $BUILD_FOLDER)
+          abc='find . -name $BUILD_FOLDER' 
           echo $abc
         """.trim()
       }
