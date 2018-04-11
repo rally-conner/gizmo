@@ -60,12 +60,13 @@ pipeline {
           }
         }
         sh """
-          YOYO=\$(find . -name $BUILD_FOLDER)
-          echo $YOYO
+          pwd
+          ls
+          cd $BUILD_FOLDER
           export ABCD=$YOYO
           echo ${repoNameToBuild}
-          echo $BUILD_FOLDER
-          echo ${ABCD}
+          pwd
+          ls
         """.trim()
       }
     }
