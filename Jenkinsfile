@@ -3,6 +3,7 @@
 import com.rally.Robot
 import com.rally.Git
 def semverScript = libraryResource 'semver.sh'
+def timeStamp = Calendar.getInstance().getTime().format('YYYYMMdd-hhmmss',TimeZone.getTimeZone('UTC'))
 String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
@@ -55,11 +56,9 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          //String rel = "${params.release}"
-          currentGitVersion = git.nextTag("${params.release}")
+          nextGitTagVersion = git.nextTag("${params.release}")
         }
-        echo "test me"
-        echo "${currentGitVersion}"
+        echo timeStamp
       }
     }
     //stage('Build: run setup.py and push AF'){
@@ -67,14 +66,16 @@ pipeline {
     //    script {
     //      if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
     //        repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+    //        artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
     //        } else {
     //        repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
+    //        artifactoryFolderName = "${params.BUILD_TYPE}"
     //      }
     //    }
     //    sh """
     //      cd $BUILD_FOLDER
     //      sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-    //      sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
+    //      sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}'/\" setup.py
     //      python setup.py sdist upload -r rallyhealth
     //    """.trim()
     //  }
