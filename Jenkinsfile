@@ -51,8 +51,10 @@ pipeline {
       }
     }
     stage('Get tag version') {
-      script {
-        version = "v1.0"
+      steps {
+        script {
+          version = "v1.0"
+        }
       }
     }
     stage('Build: run setup.py and push AF'){
