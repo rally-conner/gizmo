@@ -55,7 +55,7 @@ pipeline {
       steps {
         script {
           version = 'v3.0'
-          String git_version = git.previousVersion()
+          git_version = git.previousVersion()
         }
         echo "test me"
         echo "${version}"
