@@ -55,7 +55,7 @@ pipeline {
       steps {
         script {
           version = 'v3.0'
-          git_version = git.previousVersion()
+          git_version = git.nextTag("${release}")
         }
         echo "test me"
         echo "${version}"
