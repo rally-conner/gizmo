@@ -2,7 +2,12 @@
 
 import com.rally.Robot
 import com.rally.Git
+import java.text.SimpleDateFormat
+
 def semverScript = libraryResource 'semver.sh'
+def date = new Date()
+def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
+
 String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
@@ -58,7 +63,7 @@ pipeline {
           nextGitTagVersion = git.nextTag("${params.release}")
         }
         echo "TimeStamp: ${currentBuild.startTimeInMillis}"
-        echo "TimeStamp: ${Util.getTimeSpanString(System.currentTimeMillis())}"
+        echo dateFormat.format(date)
       }
     }
     //stage('Build: run setup.py and push AF'){
