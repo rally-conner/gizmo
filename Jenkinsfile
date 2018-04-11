@@ -1,6 +1,6 @@
 @Library("global-pipeline-libraries") _
-
-import com.rally.Robot
+// @Library("pipeline-scripts") _
+//import com.rally.Robot
 def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo'
 Robot robot = new Robot()
