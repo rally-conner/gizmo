@@ -58,7 +58,7 @@ pipeline {
           String git_version = git.previousVersion()
         }
         echo "test me"
-        echo "$git_version"
+        echo "${git_version}"
       }
     }
     //stage('Build: run setup.py and push AF'){
