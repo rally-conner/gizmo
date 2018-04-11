@@ -44,7 +44,7 @@ pipeline {
         sh "echo '[distutils]' >> ~/.pypirc"
         sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
         sh "echo '[rallyhealth]' >> ~/.pypirc"
-        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
+        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local/$JOB_BASE_NAME' >> ~/.pypirc"
         sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
         sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
       }
@@ -52,7 +52,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          version = "v1.0"
+          version = 'v2.0'
         }
       }
     }
