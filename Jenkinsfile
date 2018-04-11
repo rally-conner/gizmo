@@ -3,7 +3,7 @@
 import com.rally.Robot
 def semverScript = libraryResource 'semver.sh'
 
-String serviceName = 'gizmo-playground'
+//String serviceName = 'gizmo'
 Robot robot = new Robot()
 
 /*
@@ -20,7 +20,7 @@ pipeline {
   agent {
     node {
       label 'Pipeline_CI'
-      customWorkspace "${serviceName}"
+      //customWorkspace "${serviceName}"
     }
   }
   environment {
