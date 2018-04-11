@@ -24,7 +24,7 @@ pipeline {
     choice(name: 'RELEASE', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'BUILD_TYPE', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'SHA1', defaultValue: 'master', description: 'SHA to release')
-    choice(name: 'BUILD_FOLDER', choices: 'shared_library\ntool1', description: 'Give folder to be built')
+    choice(name: 'BUILD_FOLDER', choices: 'shared_library\ntool1\ntool2', description: 'Give folder to be built')
     }
   stages {
     stage('Checkout SCM') {
@@ -44,7 +44,7 @@ pipeline {
         sh "echo '[distutils]' >> ~/.pypirc"
         sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
         sh "echo '[rallyhealth]' >> ~/.pypirc"
-        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local/$JOB_BASE_NAME' >> ~/.pypirc"
+        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
         sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
         sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
       }
