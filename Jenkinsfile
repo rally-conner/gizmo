@@ -1,4 +1,5 @@
 @Library("pipeline-scripts") _
+@Library("global-pipeline-libraries") _
 
 import com.rally.Robot
 def semverScript = libraryResource 'semver.sh'
@@ -54,25 +55,27 @@ pipeline {
       steps {
         script {
           version = 'v3.0'
+          String git_version = rally_git_nextTag('major')
         }
+        echo "$git_version"
       }
     }
-    stage('Build: run setup.py and push AF'){
-      steps {
-        script {
-          if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
-            repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
-            } else {
-            repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
-          }
-        }
-        sh """
-          cd $BUILD_FOLDER
-          sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
-          python setup.py sdist upload -r rallyhealth
-        """.trim()
-      }
-    }
+    //stage('Build: run setup.py and push AF'){
+    //  steps {
+    //    script {
+    //      if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
+    //        repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+    //        } else {
+    //        repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
+    //      }
+    //    }
+    //    sh """
+    //      cd $BUILD_FOLDER
+    //      sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
+    //      sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
+    //      python setup.py sdist upload -r rallyhealth
+    //    """.trim()
+    //  }
+    //}
   }
 }
