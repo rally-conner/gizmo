@@ -40,14 +40,15 @@ pipeline {
     }
     stage('Create .pypirc') {
       steps{
-        sh """
-          echo '[distutils]
-    index-servers = rallyhealth
-    [rallyhealth]
-    repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local
-    username: $ARTIFACTORY_USER
-    password: $ARTIFACTORY_PASSWORD' > ~/.pypirc
-        """.trim()
+        sh "rm ~/.pypirc"
+        sh '''
+          echo "[distutils]
+          index-servers = rallyhealth
+          [rallyhealth]
+          repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local
+          username: $ARTIFACTORY_USER
+          password: $ARTIFACTORY_PASSWORD" > ~/.pypirc
+        '''.trim()
       }
     }
     stage('Get tag version') {
