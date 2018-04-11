@@ -53,7 +53,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          version = 'v2.0'
+          version = 'v3.0'
         }
       }
     }
