@@ -41,7 +41,8 @@ pipeline {
     stage('Create .pypirc') {
       steps{
         sh """
-          echo '[distutils]
+          echo '
+          [distutils]
           index-servers = rallyhealth
           [rallyhealth]
           repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local
