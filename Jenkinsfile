@@ -63,7 +63,6 @@ pipeline {
           pwd
           ls
           cd $BUILD_FOLDER
-          export ABCD=$YOYO
           echo ${repoNameToBuild}
           pwd
           ls
