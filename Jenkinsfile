@@ -22,9 +22,9 @@ pipeline {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
     }
   parameters {
-    choice(name: 'RELEASE', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
+    choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'BUILD_TYPE', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
-    string(name: 'SHA1', defaultValue: 'master', description: 'SHA to release')
+    string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
     choice(name: 'BUILD_FOLDER', choices: 'shared_library\ntool1\ntool2', description: 'Give folder to be built')
     }
   stages {
@@ -53,7 +53,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          version = 'v4.0'
+          version = 'v3.0'
         }
       }
     }
