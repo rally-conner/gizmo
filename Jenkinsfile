@@ -1,4 +1,5 @@
 @Library("pipeline-scripts") _
+
 import com.rally.Robot
 import com.rally.Git
 def semverScript = libraryResource 'semver.sh'
@@ -54,8 +55,10 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
+          String rel = "${params.release}"
+          echo rel
           version = 'v3.0'
-          git_version = git.nextTag("${params.release}")
+          git_version = git.nextTag(rel)
         }
         echo "test me"
         echo "${version}"
