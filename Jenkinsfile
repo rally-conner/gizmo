@@ -64,7 +64,7 @@ pipeline {
           cd $BUILD_FOLDER
           echo ${repoNameToBuild}
           sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
+          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = ${version}/\" setup.py
           python setup.py sdist upload -r rallyhealth
         """.trim()
       }
