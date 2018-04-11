@@ -58,6 +58,7 @@ pipeline {
           String git_version = git.previousVersion()
         }
         echo "test me"
+        echo "${version}"
         echo "${git_version}"
       }
     }
