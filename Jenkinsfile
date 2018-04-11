@@ -55,14 +55,11 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          String rel = "${params.release}"
-          echo rel
-          version = 'v3.0'
-          git_version = git.nextTag(rel)
+          //String rel = "${params.release}"
+          currentGitVersion = git.nextTag("${params.release}")
         }
         echo "test me"
-        echo "${version}"
-        echo "${git_version}"
+        echo "${currentGitVersion}"
       }
     }
     //stage('Build: run setup.py and push AF'){
