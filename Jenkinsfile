@@ -1,4 +1,3 @@
-@Library("pipeline-scripts")
 @Library("global-pipeline-libraries") _
 
 import com.rally.Robot
@@ -40,23 +39,24 @@ pipeline {
         ]
       } 
     }
-    stage('Create .pypirc') {
-      steps{
-        sh "rm ~/.pypirc"
-        sh "echo '[distutils]' >> ~/.pypirc"
-        sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
-        sh "echo '[rallyhealth]' >> ~/.pypirc"
-        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
-        sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
-        sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
-      }
-    }
+    //stage('Create .pypirc') {
+    //  steps{
+    //    sh "rm ~/.pypirc"
+    //    sh "echo '[distutils]' >> ~/.pypirc"
+    //    sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
+    //    sh "echo '[rallyhealth]' >> ~/.pypirc"
+    //    sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
+    //    sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
+    //    sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
+    //  }
+    //}
     stage('Get tag version') {
       steps {
         script {
           version = 'v3.0'
           String git_version = rally_git_nextTag('major')
         }
+        echo "test me"
         echo "$git_version"
       }
     }
