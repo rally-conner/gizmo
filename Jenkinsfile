@@ -3,7 +3,7 @@
 //import com.rally.Robot
 def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo'
-Robot robot = new Robot()
+//Robot robot = new Robot()
 
 /*
 
