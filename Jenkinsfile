@@ -62,9 +62,9 @@ pipeline {
         script {
           nextGitTagVersion = git.nextTag("${params.release}")
         }
-        env.runTime = dateFormat.format(date)
-        echo env.runTime
-        echo "this is ${env.runTime}" 
+        runTime = dateFormat.format(date)
+        echo runTime
+        echo "this is ${runTime}" 
       }
     }
     //stage('Build: run setup.py and push AF'){
