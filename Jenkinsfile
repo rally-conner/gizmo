@@ -53,7 +53,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          version = 'v3.0'
+          version = 'v4.0'
         }
       }
     }
@@ -61,9 +61,9 @@ pipeline {
       steps {
         script {
           if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
-            repoNameToBuild = "${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+            repoNameToBuild = "${JOB_BASE_NAME}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             } else {
-            repoNameToBuild = "${params.BUILD_TYPE}"
+            repoNameToBuild = "${JOB_BASE_NAME}_${params.BUILD_TYPE}"
           }
         }
         sh """
