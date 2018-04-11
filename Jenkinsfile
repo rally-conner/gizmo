@@ -3,7 +3,7 @@
 import com.rally.Robot
 import com.rally.Git
 def semverScript = libraryResource 'semver.sh'
-def timeStamp = Calendar.getInstance().getTime().format('YYYYMMdd-hhmmss',TimeZone.getTimeZone('UTC'))
+//def timeStamp = Calendar.getInstance().getTime().format('YYYYMMdd-hhmmss',TimeZone.getTimeZone('UTC'))
 String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
