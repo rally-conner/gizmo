@@ -1,4 +1,4 @@
-@Library("pipeline-scripts") _
+@Library("pipeline-scripts")
 @Library("global-pipeline-libraries") _
 
 import com.rally.Robot
