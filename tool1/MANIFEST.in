@@ -1,0 +1,5 @@
+recursive-include *.py
+include requirements.txt
+recursive-exclude *.pyc
+recursive-exclude __pycache__
+recursive-exclude .DS_Store
