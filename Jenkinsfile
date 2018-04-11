@@ -1,9 +1,10 @@
-@Library("global-pipeline-libraries") _
-@Library("pipeline-scripts")
+@Library("pipeline-scripts") _
 import com.rally.Robot
+import com.rally.Git
 def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo'
 Robot robot = new Robot()
+Git git = new Git()
 
 /*
 
@@ -54,7 +55,7 @@ pipeline {
       steps {
         script {
           version = 'v3.0'
-          String git_version = rally_git_nextTag('major')
+          String git_version = git.previousVersion()
         }
         echo "test me"
         echo "$git_version"
