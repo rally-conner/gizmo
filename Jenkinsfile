@@ -59,11 +59,12 @@ pipeline {
             repoNameToBuild = "${params.BUILD_TYPE}"
           }
         }
+        sh "export ABCD=$(find . -name $BUILD_FOLDER)"
+
         sh """
           echo ${repoNameToBuild}
           echo $BUILD_FOLDER
-          abc='find . -name $BUILD_FOLDER' 
-          echo $abc
+          echo $ABCD
         """.trim()
       }
     }
