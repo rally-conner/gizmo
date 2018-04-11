@@ -87,7 +87,7 @@ pipeline {
    stage('Publish git tag to github') {
      steps {
       script {
-        git.push("${nextGitTagVersion}-${params.BUILD_TYPE}", "${BUILD_URL}")
+        git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
       }
      }
    } // end of Publish git tag to github
