@@ -60,11 +60,11 @@ pipeline {
           }
         }
         sh """
-          export ABCD=\$(find . -name $BUILD_FOLDER)
-          export YOYO=MEME
+          YOYO=\$(find . -name $BUILD_FOLDER)
+          echo $YOYO
+          export ABCD=$YOYO
           echo ${repoNameToBuild}
           echo $BUILD_FOLDER
-          echo ${YOYO}
           echo ${ABCD}
         """.trim()
       }
