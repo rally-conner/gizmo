@@ -64,8 +64,8 @@ pipeline {
           export YOYO=MEME
           echo ${repoNameToBuild}
           echo $BUILD_FOLDER
-          echo $YOYO
-          echo $ABCD
+          echo ${YOYO}
+          echo ${ABCD}
         """.trim()
       }
     }
