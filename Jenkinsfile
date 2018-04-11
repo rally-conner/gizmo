@@ -60,11 +60,10 @@ pipeline {
           }
         }
         sh """
-          echo 'test me'
           echo ${repoNameToBuild}
-          echo 'test you'
-          ls -a
-          env
+          echo $BUILD_FOLDER
+          abc=$(find . -name $BUILD_FOLDER)
+          echo $abc
         """.trim()
       }
     }
