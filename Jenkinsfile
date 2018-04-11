@@ -25,9 +25,6 @@ pipeline {
   }
   environment {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
-      RELEASE = "${params.release}"
-      BUILD_FOLDER = "${params.build_folder}"
-      TEST_ME = "${params.release}_TESTME"
     }
   parameters {
     choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
@@ -79,6 +76,9 @@ pipeline {
           echo 'test you'
           ls -a
           env
+          echo $sha1
+          pwd
+          cat ~/.pypirc
         """.trim()
       }
     }
