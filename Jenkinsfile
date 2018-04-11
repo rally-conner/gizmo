@@ -46,45 +46,43 @@ pipeline {
         ]
       } 
     }
-    //stage('Create .pypirc') {
-    //  steps{
-    //    sh "rm ~/.pypirc"
-    //    sh "echo '[distutils]' >> ~/.pypirc"
-    //    sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
-    //    sh "echo '[rallyhealth]' >> ~/.pypirc"
-    //    sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
-    //    sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
-    //    sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
-    //  }
-    //}
+    stage('Create .pypirc') {
+      steps{
+        sh "rm ~/.pypirc"
+        sh "echo '[distutils]' >> ~/.pypirc"
+        sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
+        sh "echo '[rallyhealth]' >> ~/.pypirc"
+        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
+        sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
+        sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
+      }
+    }
     stage('Get tag version') {
       steps {
         script {
           nextGitTagVersion = git.nextTag("${params.release}")
           runTime = dateFormat.format(date)
         }
-        echo runTime
-        echo "this is ${runTime}" 
       }
     }
-    //stage('Build: run setup.py and push AF'){
-    //  steps {
-    //    script {
-    //      if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
-    //        repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
-    //        artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
-    //        } else {
-    //        repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
-    //        artifactoryFolderName = "${params.BUILD_TYPE}"
-    //      }
-    //    }
-    //    sh """
-    //      cd $BUILD_FOLDER
-    //      sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-    //      sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}'/\" setup.py
-    //      python setup.py sdist upload -r rallyhealth
-    //    """.trim()
-    //  }
-    //}
+    stage('Build: run setup.py and push AF'){
+      steps {
+        script {
+          if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
+            repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+            artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
+            } else {
+            repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
+            artifactoryFolderName = "${params.BUILD_TYPE}"
+          }
+        }
+        sh """
+          cd $BUILD_FOLDER
+          sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
+          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runTime}'/\" setup.py
+          python setup.py sdist upload -r rallyhealth
+        """.trim()
+      }
+    }
   }
 }
