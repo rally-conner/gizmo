@@ -6,7 +6,15 @@ def semverScript = libraryResource 'semver.sh'
 String serviceName = 'gizmo-playground'
 Robot robot = new Robot()
 
+/*
 
+        withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.build_folder}", ARTI_REPO_NAME="${repoNameToBuild}"]){
+          script {
+            robot.execPythonSetup()
+          }
+        }
+
+*/
 
 pipeline {
   agent {
@@ -17,6 +25,7 @@ pipeline {
   }
   environment {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
+      RELEASE = "${params.release}"
     }
   parameters {
     choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
@@ -51,8 +60,8 @@ pipeline {
     stage('Build: run setup.py and push AF'){
       steps {
         sh """
-          cat ~/.pypirc
-          echo 'test me test you'
+          echo $RELEASE
+          echo '******'
         """.trim()
         script {
           if ("${params.build_type}" == "SNAPSHOT"){
@@ -61,11 +70,13 @@ pipeline {
             repoNameToBuild = "${params.build_folder}"
           }
         }
-        withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.build_folder}", ARTI_REPO_NAME="${repoNameToBuild}"]){
-          script {
-            robot.execPythonSetup()
-          }
-        }
+        sh """
+          echo 'test me'
+          echo ${repoNameToBuild}
+          echo ${parm.repoNameToBuild}
+          echo 'test you'
+          ls -a
+        """.trim()
       }
     }
   }
