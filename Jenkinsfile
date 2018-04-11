@@ -58,7 +58,8 @@ pipeline {
         script {
           nextGitTagVersion = git.nextTag("${params.release}")
         }
-        echo timeStamp
+        echo "TimeStamp: ${currentBuild.startTimeInMillis}"
+        echo "TimeStamp: ${Util.getTimeSpanString(System.currentTimeMillis()}"
       }
     }
     //stage('Build: run setup.py and push AF'){
