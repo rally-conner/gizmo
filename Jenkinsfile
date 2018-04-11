@@ -45,7 +45,7 @@ pipeline {
             userRemoteConfigs: scm.userRemoteConfigs
         ]
       } 
-    }
+    }  // end of checkout SCM
     stage('Create .pypirc') {
       steps{
         sh "rm ~/.pypirc"
@@ -56,7 +56,7 @@ pipeline {
         sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
         sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
       }
-    }
+    }  // end of Create .pypirc
     stage('Get tag version') {
       steps {
         script {
@@ -64,8 +64,8 @@ pipeline {
           runTime = dateFormat.format(date)
         }
       }
-    }
-    stage('Build: run setup.py and push AF'){
+    } // end of Get tag version
+    stage('Build: run setup.py and push AF') {
       steps {
         script {
           if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
@@ -84,5 +84,12 @@ pipeline {
         """.trim()
       }
     }
-  }
-}
+   stage('Publish git tag to github') {
+     steps {
+      script {
+        git.push("${nextGitTagVersion}-${params.BUILD_TYPE}", "${BUILD_URL}")
+      }
+     }
+   } // end of Publish git tag to github
+  } // end of stages
+}  // end of pipeline
