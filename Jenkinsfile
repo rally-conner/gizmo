@@ -3,7 +3,6 @@
 import com.rally.Robot
 import com.rally.Git
 def semverScript = libraryResource 'semver.sh'
-//def timeStamp = Calendar.getInstance().getTime().format('YYYYMMdd-hhmmss',TimeZone.getTimeZone('UTC'))
 String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
@@ -59,7 +58,7 @@ pipeline {
           nextGitTagVersion = git.nextTag("${params.release}")
         }
         echo "TimeStamp: ${currentBuild.startTimeInMillis}"
-        //echo "TimeStamp: ${Util.getTimeSpanString(System.currentTimeMillis())}"
+        echo "TimeStamp: ${Util.getTimeSpanString(System.currentTimeMillis())}"
       }
     }
     //stage('Build: run setup.py and push AF'){
