@@ -50,6 +50,11 @@ pipeline {
         """.trim()
       }
     }
+    stage('Get tag version') {
+      script {
+        version = "v1.0"
+      }
+    }
     stage('Build: run setup.py and push AF'){
       steps {
         script {
@@ -57,14 +62,13 @@ pipeline {
             repoNameToBuild = "${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             } else {
             repoNameToBuild = "${params.BUILD_TYPE}"
-            version = "v1.0"
           }
         }
         sh """
           cd $BUILD_FOLDER
           echo ${repoNameToBuild}
           sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = ${version}/\" setup.py
+          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
           python setup.py sdist upload -r rallyhealth
         """.trim()
       }
