@@ -3,16 +3,11 @@
 import com.rally.Robot
 def semverScript = libraryResource 'semver.sh'
 
-//String serviceName = 'gizmo'
 Robot robot = new Robot()
 
 /*
 
-        withEnv([RELEASE="${params.release}",PACKAGE_PATH="${params.build_folder}", ARTI_REPO_NAME="${repoNameToBuild}"]){
-          script {
-            robot.execPythonSetup()
-          }
-        }
+
 
 */
 
@@ -20,17 +15,16 @@ pipeline {
   agent {
     node {
       label 'Pipeline_CI'
-      //customWorkspace "${serviceName}"
     }
   }
   environment {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
     }
   parameters {
-    choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
-    choice(name: 'build_type', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
-    string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
-    choice(name: 'build_folder', choices: 'shared_library\ntool1', description: 'Give folder to be built')
+    choice(name: 'RELEASE', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
+    choice(name: 'BUILD_TYPE', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
+    string(name: 'SHA1', defaultValue: 'master', description: 'SHA to release')
+    choice(name: 'BUILD_FOLDER', choices: 'shared_library\ntool1', description: 'Give folder to be built')
     }
   stages {
     stage('Checkout SCM') {
@@ -59,10 +53,10 @@ pipeline {
     stage('Build: run setup.py and push AF'){
       steps {
         script {
-          if ("${params.build_type}" == "SNAPSHOT"){
-            repoNameToBuild = "${params.build_folder}_${params.build_type}"
+          if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
+            repoNameToBuild = "${params.build_folder}_${params.BUILD_TYPE}"
             } else {
-            repoNameToBuild = "${params.build_folder}"
+            repoNameToBuild = "${params.BUILD_TYPE}"
           }
         }
         sh """
@@ -71,9 +65,6 @@ pipeline {
           echo 'test you'
           ls -a
           env
-          echo $sha1
-          pwd
-          cat ~/.pypirc
         """.trim()
       }
     }
