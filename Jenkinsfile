@@ -61,18 +61,13 @@ pipeline {
       steps {
         script {
           if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
-            repoNameToBuild = "${JOB_BASE_NAME}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+            repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             } else {
-            repoNameToBuild = "${JOB_BASE_NAME}_${params.BUILD_TYPE}"
+            repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
           }
         }
         sh """
-          pwd
-          ls
           cd $BUILD_FOLDER
-          pwd
-          ls
-          echo ${repoNameToBuild}
           sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
           sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${version}'/\" setup.py
           python setup.py sdist upload -r rallyhealth
