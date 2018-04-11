@@ -61,8 +61,8 @@ pipeline {
       steps {
         script {
           nextGitTagVersion = git.nextTag("${params.release}")
+          runTime = dateFormat.format(date)
         }
-        runTime = dateFormat.format(date)
         echo runTime
         echo "this is ${runTime}" 
       }
