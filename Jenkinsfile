@@ -58,11 +58,6 @@ pipeline {
     }
     stage('Build: run setup.py and push AF'){
       steps {
-        sh """
-          echo $RELEASE
-          echo $TEST_ME
-          echo '******'
-        """.trim()
         script {
           if ("${params.build_type}" == "SNAPSHOT"){
             repoNameToBuild = "${params.build_folder}_${params.build_type}"
