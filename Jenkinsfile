@@ -57,7 +57,7 @@ pipeline {
             repoNameToBuild = "${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             } else {
             repoNameToBuild = "${params.BUILD_TYPE}"
-            version = 'v1.0'
+            version = "v1.0"
           }
         }
         sh """
