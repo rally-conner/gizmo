@@ -12,45 +12,6 @@ String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
 
-
-def nextTag1(String releaseType) {
-    tag = sh  (
-            script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
-            returnStdout: true
-    ).trim()
-
-
-    versions = tag.substring(1).tokenize(".-").collect ([0:3]) {it as int}
-    echo versions
-    last_element = tag.substring(1).tokenize(".-").collect ([-1]) {it1 as char}
-    echo  last_element
-
-    snapshot = false
-
-    switch(releaseType) {
-        case "major":
-            versions[0] = versions[0] + 1
-            versions[1] = 0
-            versions[2] = 0
-            break
-        case "minor":
-            versions[1] = versions[1] + 1
-            versions[2] = 0
-            break
-        case "patch":
-            versions[2] = versions[2] + 1
-            break
-        default:
-            println("Invalid release value set.  Valid values are: major/minor/patch.  Releasing SNAPSHOT")
-            snapshot = true
-    }
-
-    version = "${versions.collect {it.toString()}.join(".")}"
-    echo version
-    finalVersion = "${last_element.collect {it1.toString()}.join("-")}"
-    echo finalVersion
-    return "v${finalVersion}"
-}
 /*
 
 
@@ -134,3 +95,42 @@ pipeline {
     // } // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
+
+def nextTag1(String releaseType) {
+    tag = sh  (
+            script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
+            returnStdout: true
+    ).trim()
+
+
+    versions = tag.substring(1).tokenize(".-").collect ([0:3]) {it as int}
+    echo versions
+    last_element = tag.substring(1).tokenize(".-").collect ([-1]) {it1 as char}
+    echo  last_element
+
+    snapshot = false
+
+    switch(releaseType) {
+        case "major":
+            versions[0] = versions[0] + 1
+            versions[1] = 0
+            versions[2] = 0
+            break
+        case "minor":
+            versions[1] = versions[1] + 1
+            versions[2] = 0
+            break
+        case "patch":
+            versions[2] = versions[2] + 1
+            break
+        default:
+            println("Invalid release value set.  Valid values are: major/minor/patch.  Releasing SNAPSHOT")
+            snapshot = true
+    }
+
+    version = "${versions.collect {it.toString()}.join(".")}"
+    echo version
+    finalVersion = "${last_element.collect {it1.toString()}.join("-")}"
+    echo finalVersion
+    return "v${finalVersion}"
+}
