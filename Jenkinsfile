@@ -60,7 +60,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          nextGitTagVersion = nextTag1("${params.release}")
+          nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
           echo "test me"
           echo nextGitTagVersion
           //runTime = dateFormat.format(date)
@@ -96,17 +96,15 @@ pipeline {
   } // end of stages
 }  // end of pipeline
 
-def nextTag1(String releaseType) {
+def nextTag1(String releaseType, String releaseFolder) {
     tag = sh  (
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
             returnStdout: true
     ).trim()
 
-
-    versions = tag.substring(1).tokenize(".-").collect ([0:3]) {it as int}
+    tmpTag = tag.minus("-"+releaseFolder)
+    versions = tmpTag.substring(1).tokenize(".").collect {it as int}
     echo versions
-    last_element = tag.substring(1).tokenize(".-").collect ([-1]) {it1 as char}
-    echo  last_element
 
     snapshot = false
 
@@ -129,8 +127,6 @@ def nextTag1(String releaseType) {
     }
 
     version = "${versions.collect {it.toString()}.join(".")}"
-    echo version
-    finalVersion = "${last_element.collect {it1.toString()}.join("-")}"
-    echo finalVersion
-    return "v${finalVersion}"
+
+    return "v${version}"
 }
