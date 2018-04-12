@@ -60,7 +60,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          sh "git tag -d v2.0.0-shared_library"
+          //sh "git tag -d v2.0.0-shared_library"
            tag = sh  (
              script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
              returnStdout: true
