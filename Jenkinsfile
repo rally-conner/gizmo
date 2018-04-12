@@ -101,8 +101,9 @@ pipeline {
 
 */
 def isTagExist(String releaseFolder) {
+    serverValue = "v*-" +releaseFolder
     rs = sh  (
-            script: 'git describe --first-parent --tags --abbrev=0 --match "v*-$releaseFolder"',
+            script: 'git describe --first-parent --tags --abbrev=0 --match ${serverValue}',
             returnStatus: true
     ).trim()
 
