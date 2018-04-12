@@ -99,14 +99,15 @@ pipeline {
 
 
 /*
+Check user defined git tag exist in the repo or not
 
 */
 def isTagExist(String releaseFolder) {
-    releaseFolder = "yoyo"
+    releaseFolder = ""
     rs = sh  (
             script: """git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${releaseFolder}'""",
             returnStatus: true
-    )
+    ) == 0
 
     return rs
 }
