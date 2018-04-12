@@ -103,10 +103,10 @@ def nextTag1(String releaseType, String releaseFolder) {
     ).trim()
     echo tag
     echo "test me"
-    String tmpTag = tag.replaceAll("[^.0-9]","");
-    echo tmpTag
+    tag = tag.replaceAll("[^.0-9]","");
     echo "test you"
-    versions = tmpTag.tokenize(".").collect {it as int}
+    def versions = []
+    versions = tag.tokenize(".").collect {it as int}
     echo versions
 
     snapshot = false
