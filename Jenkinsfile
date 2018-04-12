@@ -22,7 +22,7 @@ def nextTag1(String releaseType) {
 
     versions = tag.substring(1).tokenize(".-").collect ([0:3]) {it as int}
     echo versions
-    last_element = tag.substring(1).tokenize(".-").collect ([3:]) {it1 as char}
+    last_element = tag.substring(1).tokenize(".-").collect ([-1] {it1 as char}
     echo  last_element
 
     snapshot = false
