@@ -107,8 +107,7 @@ def nextTag1(String releaseType, String releaseFolder) {
     echo "test you"
     def versions = []
     versions = tag.tokenize(".").collect {it as int}
-    echo versions
-
+    print versions
     snapshot = false
 
     switch(releaseType) {
