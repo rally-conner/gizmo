@@ -104,8 +104,9 @@ def nextTag1(String releaseType, String releaseFolder) {
     echo tag
     echo "test me"
     tmpTag = tag.replaceAll("[^.0-9]","");
+    echo tmpTag
     echo "test you"
-    versions = tmpTag.substring(1).tokenize(".").collect {it as int}
+    versions = tmpTag.tokenize(".").collect {it as int}
     echo versions
 
     snapshot = false
