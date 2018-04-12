@@ -61,14 +61,14 @@ pipeline {
       steps {
         script {
           // sh "git tag -d v2.0.0-shared_library"
-          tagList = sh  (
+          tag = sh  (
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
             returnStdout: true
           ).trim()
-          tagList.each {tag --> println tag}
+          tag.each {tok -> println tok}
           echo "test you"
-          version2 = tag.tokenize(".")
-          echo version2
+          // version2 = tag.tokenize(".")
+          // echo version2
           //nextGitTagVersion = git.nextTag("${params.release}")
           //runTime = dateFormat.format(date)
         }
