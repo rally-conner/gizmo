@@ -99,14 +99,23 @@ pipeline {
 
 
 /*
-Check user defined git tag exist in the repo or not
+Check the given git tag exist in the repo or not
+if exist, return ture, else false
 
+example: 
+
+subfixValue = '-SNAPSHOT', it will search 'v[0-9].*subfixValue', so 
+any of the values ('v1.0.0-SNAPSHOT', v1.0.1SNAPSHOT, v11.1.2-SNAPSHOT) will be ture
+
+subfixValue = '' , it will search 'v*[0-9]', so 
+any of the value ('v1.0.1', 'v1', 'v0.0.1') will be ture
 */
-def isTagExist(String releaseFolder) {
+def isTagExist(String subfixValue) {
     releaseFolder = ""
     rs = sh  (
-            script: """git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${releaseFolder}'""",
-            returnStatus: true
+            script: """
+            git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${subfixValue}'
+            """, returnStatus: true
     ) == 0
 
     return rs
