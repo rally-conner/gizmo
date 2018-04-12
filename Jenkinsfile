@@ -12,6 +12,45 @@ String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
 
+
+def nextTag1(String releaseType) {
+    tag = sh  (
+            script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
+            returnStdout: true
+    ).trim()
+
+
+    versions = tag.substring(1).tokenize(".-").collect ([0:3]) {it as int}
+    echo versions
+    last_element = tag.substring(1).tokenize(".-").collect ([3:]) {it1 as char}
+    echo  last_element
+
+    snapshot = false
+
+    switch(releaseType) {
+        case "major":
+            versions[0] = versions[0] + 1
+            versions[1] = 0
+            versions[2] = 0
+            break
+        case "minor":
+            versions[1] = versions[1] + 1
+            versions[2] = 0
+            break
+        case "patch":
+            versions[2] = versions[2] + 1
+            break
+        default:
+            println("Invalid release value set.  Valid values are: major/minor/patch.  Releasing SNAPSHOT")
+            snapshot = true
+    }
+
+    version = "${versions.collect {it.toString()}.join(".")}"
+    echo version
+    finalVersion = "${last_element.collect {it1.toString()}.join("-")}"
+    echo finalVersion
+    return "v${finalVersion}"
+}
 /*
 
 
@@ -60,16 +99,9 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          // sh "git tag -d v2.0.0-shared_library"
-          tag = sh  (
-            script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
-            returnStdout: true
-          ).trim()
-          echo "test you"
-          versions = tag.substring(1).tokenize(".-")
-          versions.each {tok -> println tok}
-          // echo version2
-          //nextGitTagVersion = git.nextTag("${params.release}")
+          nextGitTagVersion = git.nextTag1("${params.release}")
+          echo "test me"
+          echo nextGitTagVersion
           //runTime = dateFormat.format(date)
         }
       }
