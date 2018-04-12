@@ -102,7 +102,7 @@ def nextTag1(String releaseType, String releaseFolder) {
             returnStdout: true
     ).trim()
 
-    tmpTag = tag - '-'+releaseFolder
+    tmpTag = tag.replaceAll("[^.0-9]","");
     versions = tmpTag.substring(1).tokenize(".").collect {it as int}
     echo versions
 
