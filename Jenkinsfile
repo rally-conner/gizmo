@@ -61,11 +61,11 @@ pipeline {
       steps {
         script {
           //sh "git tag -d v2.0.0-shared_library"
-           tag = sh  (
-             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
-             returnStdout: true
-           ).trim()
-          echo tag
+           // tagList = sh  (
+           //   script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
+           //   returnStdout: true
+           // ).trim()
+          tag = sh 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"'
           echo "test you"
           version2 = tag.tokenize(".")
           echo version2
