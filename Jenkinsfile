@@ -67,7 +67,7 @@ pipeline {
            ).trim()
           echo tag
           echo "test you"
-          version2 = tag.substring(1).tokenize(".").collect {it as String}
+          version2 = tag.substring(1).tokenize(".")
           echo version2
           //nextGitTagVersion = git.nextTag("${params.release}")
           //runTime = dateFormat.format(date)
