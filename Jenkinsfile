@@ -65,9 +65,8 @@ pipeline {
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
             returnStdout: true
           ).trim()
-          tag.each {tok -> println tok}
           echo "test you"
-          // version2 = tag.tokenize(".")
+          versions = tag.substring(1).tokenize(".-")
           // echo version2
           //nextGitTagVersion = git.nextTag("${params.release}")
           //runTime = dateFormat.format(date)
