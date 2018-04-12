@@ -60,9 +60,9 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
+          aa = isTagExist("${params.BUILD_FOLDER}")
+          print aa
           nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
-          echo "test me"
-          echo nextGitTagVersion
           //runTime = dateFormat.format(date)
         }
       }
@@ -96,18 +96,28 @@ pipeline {
   } // end of stages
 }  // end of pipeline
 
-def nextTag1(String releaseType, String releaseFolder) {
+
+/*
+
+*/
+def isTagExist(String releaseFolder) {
+    rs = sh  (
+            script: 'git describe --first-parent --tags --abbrev=0 --match "v*-$releaseFolder"',
+            returnStatus: true
+    ).trim()
+
+    return rs
+}
+
+
+def getNextTagNumber(String releaseType, String releaseFolder) {
     tag = sh  (
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
             returnStdout: true
     ).trim()
-    echo tag
-    echo "test me"
     tag = tag.replaceAll("[^.0-9]","")
-    echo "test you"
     def versions = []
     versions = tag.tokenize(".").collect {it as int}
-    print versions
     snapshot = false
 
     switch(releaseType) {
