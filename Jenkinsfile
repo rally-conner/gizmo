@@ -60,12 +60,12 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          //sh "git tag -d v2.0.0-shared_library"
-           // tagList = sh  (
-           //   script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
-           //   returnStdout: true
-           // ).trim()
-          String tag = sh "git describe --first-parent --tags --abbrev=0 --match \"v[0-9].[0-9].[0-9]-${BUILD_FOLDER}\""
+          // sh "git tag -d v2.0.0-shared_library"
+          tagList = sh  (
+            script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
+            returnStdout: true
+          ).trim()
+          tagList.each {tag --> println tag}
           echo "test you"
           version2 = tag.tokenize(".")
           echo version2
