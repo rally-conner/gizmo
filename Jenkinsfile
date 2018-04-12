@@ -111,10 +111,18 @@ subfixValue = '' , it will search 'v*[0-9]', so
 any of the value ('v1.0.1', 'v1', 'v0.0.1') will be ture
 */
 def isTagExist(String subfixValue) {
-    releaseFolder = ""
+    
+    String serachPattern = ""
+
+    if (subfixValue == "") {
+      serachPattern = "v*[0-9]"
+    } else {
+      serachPattern = "v[0-9]*${subfixValue}"
+    }
+
     rs = sh  (
             script: """
-            git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${subfixValue}'
+            git describe --first-parent --tags --abbrev=0 --match ${serachPattern}
             """, returnStatus: true
     ) == 0
 
