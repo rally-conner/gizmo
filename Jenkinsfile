@@ -65,7 +65,7 @@ pipeline {
            //   script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
            //   returnStdout: true
            // ).trim()
-          tag = sh 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"'
+          String tag = sh "git describe --first-parent --tags --abbrev=0 --match \"v[0-9].[0-9].[0-9]-${BUILD_FOLDER}\""
           echo "test you"
           version2 = tag.tokenize(".")
           echo version2
