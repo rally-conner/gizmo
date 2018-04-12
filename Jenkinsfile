@@ -61,13 +61,13 @@ pipeline {
       steps {
         script {
           //sh "git tag -d v2.0.0-shared_library"
-           String tag = sh  (
+           tag = sh  (
              script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
              returnStdout: true
            ).trim()
           echo tag
           echo "test you"
-          version2 = tag.substring(1).tokenize(".")
+          def version2 = tag.substring(1).tokenize(".")
           echo version2
           //nextGitTagVersion = git.nextTag("${params.release}")
           //runTime = dateFormat.format(date)
