@@ -99,7 +99,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          nextGitTagVersion = git.nextTag1("${params.release}")
+          nextGitTagVersion = nextTag1("${params.release}")
           echo "test me"
           echo nextGitTagVersion
           //runTime = dateFormat.format(date)
