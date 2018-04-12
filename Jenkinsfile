@@ -60,9 +60,10 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          aa = isTagExist("${params.BUILD_FOLDER}")
-          echo "test me"
-          print aa
+          rs = isTagExist("${params.BUILD_FOLDER}")
+          if ( !rs ) {
+            git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
+          }
           //nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
           //runTime = dateFormat.format(date)
         }
@@ -105,13 +106,13 @@ if exist, return ture, else false
 example: 
 
 subfixValue = '-SNAPSHOT', it will search 'v[0-9].*subfixValue', so 
-any of the values ('v1.0.0-SNAPSHOT', v1.0.1SNAPSHOT, v11.1.2-SNAPSHOT) will be ture
+any of the values ('v1.0.0-SNAPSHOT', v1.0.1SNAPSHOT, v11.1.2-SNAPSHOT) will be true
 
 subfixValue = '' , it will search 'v*[0-9]', so 
-any of the value ('v1.0.1', 'v1', 'v0.0.1') will be ture
+any of the value ('v1.0.1', 'v1', 'v0.0.1') will be true
 */
 def isTagExist(String subfixValue) {
-    subfixValue = ""
+
     String serachPattern = ""
 
     if (subfixValue == "") {
@@ -120,6 +121,7 @@ def isTagExist(String subfixValue) {
       serachPattern = "v[0-9]*${subfixValue}"
     }
 
+    // compare the return status code == 0 and True/False
     rs = sh  (
             script: """
             git describe --first-parent --tags --abbrev=0 --match ${serachPattern}
