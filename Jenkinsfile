@@ -60,19 +60,20 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
+          sh "git tag -d v2.0.0-SNAPSHOT"
           // tag = sh  (
-          //   script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
+          //   script: 'git tag -d v2.0.0-SNAPSHOT',
           //   returnStdout: true
           // ).trim()
-          // echo tag
+          echo tag
           nextGitTagVersion = git.nextTag("${params.release}")
           runTime = dateFormat.format(date)
         }
       }
     } // end of Get tag version
     stage('Build: run setup.py and push AF') {
-     steps {
-       script {
+      steps {
+        script {
          if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
            repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
            artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
@@ -80,7 +81,7 @@ pipeline {
            repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
            artifactoryFolderName = "${params.BUILD_TYPE}"
          }
-       }
+        }
        sh """
          cd $BUILD_FOLDER
          sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
@@ -88,13 +89,13 @@ pipeline {
          python setup.py sdist upload -r rallyhealth
        """.trim()
      }
-    }
+    } // end of run setup.py and push AF
     stage('Publish git tag to github') {
-     steps {
-       script {
-         git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
-     }
-    }
+      steps {
+        script {
+          git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
+        }
+      }
     } // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
