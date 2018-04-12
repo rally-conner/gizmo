@@ -103,7 +103,7 @@ def nextTag1(String releaseType, String releaseFolder) {
     ).trim()
     echo tag
     echo "test me"
-    tag = tag.replaceAll("[^.0-9]","");
+    tag = tag.replaceAll("[^.0-9]","")
     echo "test you"
     def versions = []
     versions = tag.tokenize(".").collect {it as int}
