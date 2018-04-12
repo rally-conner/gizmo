@@ -101,8 +101,10 @@ def nextTag1(String releaseType, String releaseFolder) {
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
             returnStdout: true
     ).trim()
-
+    echo tag
+    echo "test me"
     tmpTag = tag.replaceAll("[^.0-9]","");
+    echo "test you"
     versions = tmpTag.substring(1).tokenize(".").collect {it as int}
     echo versions
 
