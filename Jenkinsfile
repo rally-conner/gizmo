@@ -60,12 +60,6 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          sh "git tag -d v2.0.0-SNAPSHOT"
-          // tag = sh  (
-          //   script: 'git tag -d v2.0.0-SNAPSHOT',
-          //   returnStdout: true
-          // ).trim()
-          echo tag
           nextGitTagVersion = git.nextTag("${params.release}")
           runTime = dateFormat.format(date)
         }
