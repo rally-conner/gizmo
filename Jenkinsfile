@@ -102,7 +102,7 @@ def nextTag1(String releaseType, String releaseFolder) {
             returnStdout: true
     ).trim()
 
-    tmpTag = tag.minus("-"+releaseFolder)
+    tmpTag = tag - '-'+releaseFolder
     versions = tmpTag.substring(1).tokenize(".").collect {it as int}
     echo versions
 
