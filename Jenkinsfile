@@ -105,7 +105,7 @@ def isTagExist(String releaseFolder) {
     print serverValue
     rs = sh  (
             script: """git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${releaseFolder}'""",
-            returnStatus: true returnStdout: true
+            returnStatus: true, returnStdout: true
     ).trim()
 
     return rs
