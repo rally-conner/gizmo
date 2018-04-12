@@ -61,8 +61,9 @@ pipeline {
       steps {
         script {
           aa = isTagExist("${params.BUILD_FOLDER}")
+          echo "test me"
           print aa
-          nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
+          //nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
           //runTime = dateFormat.format(date)
         }
       }
@@ -101,12 +102,11 @@ pipeline {
 
 */
 def isTagExist(String releaseFolder) {
-    serverValue = "v*-" +releaseFolder
-    print serverValue
     rs = sh  (
             script: """git describe --first-parent --tags --abbrev=0 --match 'v[0-9]*${releaseFolder}'""",
-            returnStatus: true, returnStdout: true
-    ).trim()
+            returnStatus: true
+    ) == 0
+    print rs
 
     return rs
 }
