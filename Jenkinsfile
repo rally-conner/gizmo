@@ -60,36 +60,42 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
-          nextGitTagVersion = git.nextTag("${params.release}")
+          sh "git tag -d v2.0.0-shared_library"
+           tag = sh  (
+             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9].[0-9].[0-9]-${BUILD_FOLDER}"',
+             returnStdout: true
+           ).trim()
+          echo tag
+          //nextGitTagVersion = git.nextTag("${params.release}")
           runTime = dateFormat.format(date)
         }
       }
     } // end of Get tag version
-    stage('Build: run setup.py and push AF') {
-      steps {
-        script {
-         if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
-           repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
-           artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
-           } else {
-           repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
-           artifactoryFolderName = "${params.BUILD_TYPE}"
-         }
-        }
-       sh """
-         cd $BUILD_FOLDER
-         sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-         sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runTime}'/\" setup.py
-         python setup.py sdist upload -r rallyhealth
-       """.trim()
-     }
-    } // end of run setup.py and push AF
-    stage('Publish git tag to github') {
-      steps {
-        script {
-          git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
-        }
-      }
-    } // end of Publish git tag to github
+    //stage('Build: run setup.py and push AF') {
+    //  steps {
+    //    script {
+    //     if ("${params.BUILD_TYPE}" == "SNAPSHOT"){
+    //       repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
+    //       artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
+    //       } else {
+    //       repoNameToBuild = "${serviceName}_${params.BUILD_TYPE}"
+    //       artifactoryFolderName = "${params.BUILD_TYPE}"
+    //     }
+    //    }
+    //   sh """
+    //     cd $BUILD_FOLDER
+    //     sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
+    //     sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runTime}'/\" setup.py
+    //     python setup.py sdist upload -r rallyhealth
+    //   """.trim()
+    // }
+    //} // end of run setup.py and push AF
+    //stage('Publish git tag to github') {
+    //  steps {
+    //    script {
+    //      git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
+    //    }
+    //  }
+    //} // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
