@@ -64,7 +64,7 @@ pipeline {
           if ( !rs ) {
             git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
           }
-          nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
+          nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
           echo "Next release is ${nextGitTagVersion}"
           //runTime = dateFormat.format(date)
         }
@@ -98,6 +98,8 @@ pipeline {
     // } // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
+
+
 
 
 /*
