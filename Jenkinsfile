@@ -64,7 +64,7 @@ pipeline {
         script {
           testme = sh "env"
           println testme
-          getReleaseNote()
+          testHttp()
         }
       }
     }
@@ -111,13 +111,15 @@ pipeline {
   } // end of stages
 }  // end of pipeline
 
-@Grapes(
-    @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
-)
 
-import groovyx.net.http.HTTPBuilder
-import static groovyx.net.http.ContentType.*
-import static groovyx.net.http.Method.*
+def testHttp() {
+  def get = new URL("https://httpbin.org/get").openConnection();
+  def getRC = get.getResponseCode();
+  println(getRC);
+  if(getRC.equals(200)) {
+    println(get.getInputStream().getText());
+ }
+}
 
 def getReleaseNote() {
   def http = new HTTPBuilder()
