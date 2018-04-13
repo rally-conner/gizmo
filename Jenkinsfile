@@ -123,10 +123,8 @@ def testCurl() {
 
     tag123 = sh  (
             script: """
-            curl -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags -k \
-            --header 'Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef'
-            """,
-            returnStdout: true
+            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags --header 'Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef'
+            """, returnStdout: true
     ).trim()
 
     println tag123
