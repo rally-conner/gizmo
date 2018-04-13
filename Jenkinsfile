@@ -92,9 +92,9 @@ pipeline {
           emailext (
             to: "joe.tang@rallyhealth.com",
             subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            body: """<p>Your New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'</p>
-              <p>Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
-              and under folder '${repoNameToBuild}'</p>"""
+            body: """Your New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
+              Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
+              and under folder '${repoNameToBuild}'"""
           )
         }
       }
