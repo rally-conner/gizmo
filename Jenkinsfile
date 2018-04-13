@@ -4,6 +4,13 @@ import com.rally.Robot
 import com.rally.Git
 import java.text.SimpleDateFormat
 
+import groovyx.net.http.HTTPBuilder
+import static groovyx.net.http.ContentType.URLENC
+import static groovyx.net.http.ContentType.JSON
+import static groovyx.net.http.Method.POST
+import static groovyx.net.http.Method.GET
+
+
 def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
@@ -60,7 +67,8 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          sh "env"
+          testme = sh "env"
+          println testme
           getReleaseNote()
         }
       }
@@ -110,7 +118,7 @@ pipeline {
 
 
 def getReleaseNote() {
-  http = new HTTPBuilder()
+  def http = new HTTPBuilder()
   url = "https://api.github.com"
   http.request( url, GET, TEXT ) { req ->
   uri.path = '/gizmo/releases/latest'
