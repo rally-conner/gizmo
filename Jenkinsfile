@@ -64,7 +64,8 @@ pipeline {
           if ( !rs ) {
             git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
           }
-          //nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
+          nextGitTagVersion = nextTag1("${params.release}", "${params.BUILD_FOLDER}")
+          echo "Next release is ${nextGitTagVersion}"
           //runTime = dateFormat.format(date)
         }
       }
@@ -111,20 +112,20 @@ any of the values ('v1.0.0-SNAPSHOT', v1.0.1SNAPSHOT, v11.1.2-SNAPSHOT) will be 
 subfixValue = '' , it will search 'v*[0-9]', so 
 any of the value ('v1.0.1', 'v1', 'v0.0.1') will be true
 */
-def isTagExist(String subfixValue) {
+def isTagExist(String suffixValue) {
 
-    String serachPattern = ""
+    String tagPattern = ""
 
-    if (subfixValue == "") {
-      serachPattern = "v*[0-9]"
+    if (suffixValue == "") {
+      tagPattern = "v*[0-9]"
     } else {
-      serachPattern = "v[0-9]*${subfixValue}"
+      tagPattern = "v[0-9]*${suffixValue}"
     }
 
     // compare the return status code == 0 and True/False
     rs = sh  (
             script: """
-            git describe --first-parent --tags --abbrev=0 --match ${serachPattern}
+            git describe --first-parent --tags --abbrev=0 --match ${tagPattern}
             """, returnStatus: true
     ) == 0
 
