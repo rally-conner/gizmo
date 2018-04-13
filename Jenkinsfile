@@ -54,10 +54,6 @@ pipeline {
         script {
           createPypirc()
           sh "git tag"
-          pwd
-          ch ~/
-          ls
-          pwd
         }
       }
     }  // end of Create .pypirc
@@ -116,9 +112,9 @@ def createPypirc() {
       echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc
       echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc
       echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc
-      cat ~/.pypirc
     """, returnStdout: true
     ) == 0
+  sh "cat ~/.pypirc"
 }
 
 /*
