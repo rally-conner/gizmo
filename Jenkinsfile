@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 
-String serviceName = 'gizmo'
+String serviceName = 'gizmoYoYo'
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -62,6 +62,7 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
+          sh "env"
           testCurl()
         }
       }
@@ -123,7 +124,7 @@ def testHttp() {
  }
 }
 
-def testCurl() {
+def testCurl(repoName) {
 
     tag123 = sh  (
             script: """
