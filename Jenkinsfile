@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 
-String serviceName = 'gizmoHaHa'
+String serviceName = 'gizmoHlHl'
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -43,7 +43,8 @@ pipeline {
             $class: 'GitSCM',
             branches: scm.branches,
             doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
-            extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: false]],
+            //extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: false]],
+            extensions: [noTags: true,],
             userRemoteConfigs: scm.userRemoteConfigs
         ]
       } 
