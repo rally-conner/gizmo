@@ -29,7 +29,7 @@ pipeline {
       PIP_EXTRA_INDEX_URL = 'https://jenkins:$ARTIFACTORY_PASSWORD@artifacts.werally.in/artifactory/api/pypi/pypi-release-local'
     }
   parameters {
-    choice(name: 'release', choices: 'rally-versioning\npatch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
+    choice(name: 'release', choices: 'patch\nminor\nmajor', description: 'Type of release to make.  Use rally-versions for a SNAPSHOT')
     choice(name: 'BUILD_TYPE', choices: 'SNAPSHOT\nRELEASE', description: 'Build type')
     string(name: 'sha1', defaultValue: 'master', description: 'SHA to release')
     choice(name: 'BUILD_FOLDER', choices: 'shared_library\ntool1\ntool2', description: 'Give folder to be built')
@@ -57,20 +57,28 @@ pipeline {
         sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
       }
     }  // end of Create .pypirc
-    stage('Get tag version') {
+    stage ('Get Release Note') {
       steps {
         script {
-          sh "git tag -d v2.0.0-shared_library"
-          rs = isTagExist("${params.BUILD_FOLDER}")
-          if ( !rs ) {
-            git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
-          }
-          nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
-          echo "Next release is ${nextGitTagVersion}"
-          //runTime = dateFormat.format(date)
+          sh "env"
+          getReleaseNote()
         }
       }
-    } // end of Get tag version
+    }
+    // stage('Get tag version') {
+    //   steps {
+    //     script {
+    //       sh "git tag -d v2.0.0-shared_library"
+    //       rs = isTagExist("${params.BUILD_FOLDER}")
+    //       if ( !rs ) {
+    //         git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
+    //       }
+    //       nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
+    //       echo "Next release is ${nextGitTagVersion}"
+    //       //runTime = dateFormat.format(date)
+    //     }
+    //   }
+    // } // end of Get tag version
     // stage('Build: run setup.py and push AF') {
     //  steps {
     //    script {
@@ -101,6 +109,28 @@ pipeline {
 }  // end of pipeline
 
 
+def getReleaseNote() {
+  http = new HTTPBuilder()
+  url = "https://api.github.com"
+  http.request( url, GET, TEXT ) { req ->
+  uri.path = '/gizmo/releases/latest'
+  headers.'Authorization' = "Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef"
+  response.success = { resp, reader ->
+    assert resp.statusLine.statusCode == 200
+    println "Got response: ${resp.statusLine}"
+    println "Content-Type: ${resp.headers.'Content-Type'}"
+    println reader.text
+  }
+ 
+  response.success = { resp, json ->
+    println("API response: ${json}")
+  }
+
+  response.'404' = {
+    println 'Not found'
+  }
+ } // end of req
+}
 
 
 /*
