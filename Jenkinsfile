@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 
-String serviceName = "gizmo${dateFormat}"
+String serviceName = "gizmo${dateFormat.format(date)}"
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -57,6 +57,7 @@ pipeline {
           sh "pwd"
           sh "cd ~/"
           sh "pwd"
+          sh "ls"
         }
       }
     }  // end of Create .pypirc
