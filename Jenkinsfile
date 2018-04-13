@@ -90,7 +90,7 @@ pipeline {
       post {
         success {
           emailext (
-            to: "gizmo@rallyhealth.com",
+            to: "joe.tang@rallyhealth.com",
             subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             body: """\nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
               Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
