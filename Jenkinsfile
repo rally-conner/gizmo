@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 
-String serviceName = 'gizmo'
+String serviceName = 'gizmoHaHa'
 Robot robot = new Robot()
 Git git = new Git()
 
