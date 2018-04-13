@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat
 def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
-
-String serviceName = "gizmo${dateFormat.format(date)}"
+String runtimeTimeStemp = dateFormat.format(date)
+String serviceName = "gizmo${runtimeTimeStemp}"
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -43,8 +43,7 @@ pipeline {
             $class: 'GitSCM',
             branches: scm.branches,
             doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
-            //extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: false]],
-            extensions: [[$class: 'CloneOption', noTags: true]],
+            extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: false]],
             userRemoteConfigs: scm.userRemoteConfigs
         ]
       } 
@@ -53,30 +52,16 @@ pipeline {
       steps{
         script {
           createPypirc()
-          sh "git tag"
-          sh "pwd"
-          sh "cd ../"
-          sh "pwd"
-          sh "ls"
-          sh "cd ../"
-          sh "pwd"
-          sh "ls"
         }
       }
     }  // end of Create .pypirc
-    // stage('Get tag version') {
-    //   steps {
-    //     script {
-    //       rs = isTagExist("${params.BUILD_FOLDER}")
-    //       if ( !rs ) {
-    //         git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
-    //       }
-    //       nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
-    //       echo "Next Git Tag version is ${nextGitTagVersion}"
-    //       runTime = dateFormat.format(date)
-    //     }
-    //   }
-    // } // end of Get tag version
+    stage('Get tag version') {
+      steps {
+          nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
+          echo "Next Git Tag version is ${nextGitTagVersion}"
+        }
+      }
+    } // end of Get tag version
     // stage('Build: run setup.py and push AF') {
     //  steps {
     //    script {
@@ -91,7 +76,7 @@ pipeline {
     //   sh """
     //     cd $BUILD_FOLDER
     //     sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-    //     sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runTime}'/\" setup.py
+    //     sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'/\" setup.py
     //     python setup.py sdist upload -r rallyhealth
     //   """.trim()
     // }
@@ -107,8 +92,6 @@ pipeline {
 }  // end of pipeline
 
 
-
-
 def createPypirc() {
   rs = sh (
     script: """
@@ -122,38 +105,6 @@ def createPypirc() {
     """, returnStdout: true
     ) == 0
   sh "cat ~/.pypirc"
-}
-
-/*
-Check the given git tag exist in the repo or not
-if exist, return ture, else false
-
-example: 
-
-subfixValue = '-SNAPSHOT', it will search 'v[0-9].*subfixValue', so 
-any of the values ('v1.0.0-SNAPSHOT', v1.0.1SNAPSHOT, v11.1.2-SNAPSHOT) will be true
-
-subfixValue = '' , it will search 'v*[0-9]', so 
-any of the value ('v1.0.1', 'v1', 'v0.0.1') will be true
-*/
-def isTagExist(String suffixValue) {
-
-    String tagPattern = ""
-
-    if (suffixValue == "") {
-      tagPattern = "v*[0-9]"
-    } else {
-      tagPattern = "v[0-9]*${suffixValue}"
-    }
-
-    // compare the return status code == 0 and True/False
-    rs = sh  (
-            script: """
-            git describe --first-parent --tags --abbrev=0 --match ${tagPattern}
-            """, returnStatus: true
-    ) == 0
-
-    return rs
 }
 
 
