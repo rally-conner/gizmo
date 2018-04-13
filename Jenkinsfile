@@ -125,6 +125,7 @@ def testHttp() {
 
 def getReleaseFromGit(repoName) {
 
+    repoName = "RallyAge-Test"
     tag123 = sh  (
             script: """
             curl -k -X GET https://api.github.com/repos/AudaxHealthInc/${repoName}/releases/latest -H \"Authorization: 'Bearer ${GITHUB_TOKEN}'\"
