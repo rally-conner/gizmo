@@ -62,7 +62,7 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          curlRs = sh "curl --trace-ascii debugdump.txt http://www.example.com/"
+          curlRs = sh "curl -H "Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef" https://api.github.com/repos/AudaxHealthInc/gizmo/tags"
           println curlRs
         }
       }
@@ -119,6 +119,8 @@ def testHttp() {
     println(get.getInputStream().getText());
  }
 }
+
+
 
 // def getReleaseNote() {
 //   def http = new HTTPBuilder()
