@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 
-String serviceName = 'gizmoYoYo'
+String serviceName = 'gizmo'
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -62,8 +62,7 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          sh "env"
-          testCurl()
+          testCurl('${JOB_BASE_NAME}')
         }
       }
     }
@@ -124,11 +123,11 @@ def testHttp() {
  }
 }
 
-def testCurl(repoName) {
+def getReleaseFromGit(repoName) {
 
     tag123 = sh  (
             script: """
-            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags -H \"Authorization: 'Bearer ${GITHUB_TOKEN}'\"
+            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/${repoName}/releases/latest -H \"Authorization: 'Bearer ${GITHUB_TOKEN}'\"
             """, returnStdout: true
     ).trim()
 
