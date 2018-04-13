@@ -57,9 +57,10 @@ pipeline {
     }  // end of Create .pypirc
     stage('Get tag version') {
       steps {
+        script {
           nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
-          echo "Next Git Tag version is ${nextGitTagVersion}"
         }
+        echo "Next Git Tag version is ${nextGitTagVersion}"
       }
     } // end of Get tag version
     // stage('Build: run setup.py and push AF') {
