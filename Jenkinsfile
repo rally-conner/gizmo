@@ -62,7 +62,7 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          testCurl('${JOB_BASE_NAME}')
+          getReleaseFromGit('${JOB_BASE_NAME}')
         }
       }
     }
