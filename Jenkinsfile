@@ -89,22 +89,29 @@ pipeline {
       }
       post {
         success {
-          emailext (
-            to: "joe.tang@rallyhealth.com",
-            subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            body: """\nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
-              Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
-              and under folder '${repoNameToBuild}' \n
-              https://github.com/AudaxHealthInc/${serviceName}/tags \n
-              https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
-              """
-          )
+          sendEmailNotification("joe.tang")
         }
       }
     } // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
 
+
+
+def sendEmailNotification(recipients) {
+    emailext (
+      to: "${recipients}@rallyhealth.com",
+      subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+      body: """
+      \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
+        You build type is: ${params.BUILD_TYPE} \n
+        Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
+        and under folder '${repoNameToBuild}' \n
+        https://github.com/AudaxHealthInc/${serviceName}/tags \n
+        https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
+      """
+    )
+}
 
 def createPypirc() {
   rs = sh (
