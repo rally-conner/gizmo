@@ -90,7 +90,7 @@ pipeline {
       post {
         success {
           emailext (
-            to: joe.tang@rallyhealth.com,
+            to: "joe.tang@rallyhealth.com",
             subject: "Build Success",
             body: "The new Git "
           )
