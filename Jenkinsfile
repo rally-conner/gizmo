@@ -127,7 +127,7 @@ def testCurl() {
 
     tag123 = sh  (
             script: """
-            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags -H Authorization: \'Bearer ${GITHUB_TOKEN}\'
+            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags -H \"Authorization: Bearer ${GITHUB_TOKEN}\"
             """, returnStdout: true
     ).trim()
 
