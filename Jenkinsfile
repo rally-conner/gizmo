@@ -62,7 +62,7 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          curlRs = sh "curl -H "Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef" https://api.github.com/repos/AudaxHealthInc/gizmo/tags"
+          curlRs = sh 'curl -i https://api.github.com/repos/AudaxHealthInc/gizmo/tags -H "Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef"'
           println curlRs
         }
       }
