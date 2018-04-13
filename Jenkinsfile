@@ -44,7 +44,7 @@ pipeline {
             branches: scm.branches,
             doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
             //extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: false]],
-            extensions: [noTags: true,],
+            extensions: [[noTags: true]],
             userRemoteConfigs: scm.userRemoteConfigs
         ]
       } 
