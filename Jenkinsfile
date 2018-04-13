@@ -121,28 +121,26 @@ def testHttp() {
  }
 }
 
-def getReleaseNote() {
-  def http = new HTTPBuilder()
-  url = "https://api.github.com"
-  http.request( url, GET, TEXT ) { req ->
-  uri.path = '/gizmo/releases/latest'
-  headers.'Authorization' = "Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef"
-  response.success = { resp, reader ->
-    assert resp.statusLine.statusCode == 200
-    println "Got response: ${resp.statusLine}"
-    println "Content-Type: ${resp.headers.'Content-Type'}"
-    println reader.text
-  }
- 
-  response.success = { resp, json ->
-    println("API response: ${json}")
-  }
-
-  response.'404' = {
-    println 'Not found'
-  }
- } // end of req
-}
+// def getReleaseNote() {
+//   def http = new HTTPBuilder()
+//   url = "https://api.github.com"
+//   http.request( url, GET, TEXT ) { req ->
+//   uri.path = '/gizmo/releases/latest'
+//   headers.'Authorization' = "Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef"
+//   response.success = { resp, reader ->
+//     assert resp.statusLine.statusCode == 200
+//     println "Got response: ${resp.statusLine}"
+//     println "Content-Type: ${resp.headers.'Content-Type'}"
+//     println reader.text
+//   }
+//   response.success = { resp, json ->
+//     println("API response: ${json}")
+//   }
+//   response.'404' = {
+//     println 'Not found'
+//   }
+//  } // end of req
+// }
 
 
 /*
