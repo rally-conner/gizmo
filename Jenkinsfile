@@ -94,7 +94,9 @@ pipeline {
             subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             body: """Your New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
               Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
-              and under folder '${repoNameToBuild}'"""
+              and under folder '${repoNameToBuild}' \n
+              https://github.com/AudaxHealthInc/${serviceName}/tags
+              """
           )
         }
       }
