@@ -110,6 +110,10 @@ pipeline {
 }  // end of pipeline
 
 
+
+
+
+
 def testHttp() {
   def get = new URL("https://httpbin.org/get").openConnection();
   def getRC = get.getResponseCode();
@@ -123,7 +127,7 @@ def testCurl() {
 
     tag123 = sh  (
             script: """
-            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags --header 'Authorization: Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef'
+            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/gizmo/tags -H Authorization: 'Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef'
             """, returnStdout: true
     ).trim()
 
@@ -131,6 +135,9 @@ def testCurl() {
 
 }
 
+// @Grapes(
+//     @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
+// )
 
 // def getReleaseNote() {
 //   def http = new HTTPBuilder()
