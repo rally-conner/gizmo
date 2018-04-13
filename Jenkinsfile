@@ -50,33 +50,22 @@ pipeline {
     }  // end of checkout SCM
     stage('Create .pypirc') {
       steps{
-        sh "rm ~/.pypirc"
-        sh "echo '[distutils]' >> ~/.pypirc"
-        sh "echo 'index-servers = rallyhealth' >> ~/.pypirc"
-        sh "echo '[rallyhealth]' >> ~/.pypirc"
-        sh "echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc"
-        sh "echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc"
-        sh "echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc"
-      }
-    }  // end of Create .pypirc
-    stage ('Get Release Note') {
-      steps {
         script {
-          getReleaseFromGit('${JOB_BASE_NAME}')
+          createPypirc()
+          sh "git tag"
         }
       }
-    }
+    }  // end of Create .pypirc
     // stage('Get tag version') {
     //   steps {
     //     script {
-    //       sh "git tag -d v2.0.0-shared_library"
     //       rs = isTagExist("${params.BUILD_FOLDER}")
     //       if ( !rs ) {
     //         git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
     //       }
     //       nextGitTagVersion = getNextTagNumber("${params.release}", "${params.BUILD_FOLDER}")
-    //       echo "Next release is ${nextGitTagVersion}"
-    //       //runTime = dateFormat.format(date)
+    //       echo "Next Git Tag version is ${nextGitTagVersion}"
+    //       runTime = dateFormat.format(date)
     //     }
     //   }
     // } // end of Get tag version
@@ -112,55 +101,20 @@ pipeline {
 
 
 
-
-
-def testHttp() {
-  def get = new URL("https://httpbin.org/get").openConnection();
-  def getRC = get.getResponseCode();
-  println(getRC);
-  if(getRC.equals(200)) {
-    println(get.getInputStream().getText());
- }
+def createPypirc() {
+  rs = sh (
+    script: """
+      rm ~/.pypirc
+      echo '[distutils]' >> ~/.pypirc
+      echo 'index-servers = rallyhealth' >> ~/.pypirc
+      echo '[rallyhealth]' >> ~/.pypirc
+      echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc
+      echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc
+      echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc
+      cat ~/.pypirc
+    """, returnStdout: true
+    ) == 0
 }
-
-def getReleaseFromGit(repoName) {
-
-    repoName = "RallyAge-Test"
-    tag123 = sh  (
-            script: """
-            curl -k -X GET https://api.github.com/repos/AudaxHealthInc/${repoName}/releases/latest -H \"Authorization: 'Bearer ${GITHUB_TOKEN}'\"
-            """, returnStdout: true
-    ).trim()
-
-    println tag123
-
-}
-
-// @Grapes(
-//     @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
-// )
-
-// def getReleaseNote() {
-//   def http = new HTTPBuilder()
-//   url = "https://api.github.com"
-//   http.request( url, GET, TEXT ) { req ->
-//   uri.path = '/gizmo/releases/latest'
-//   headers.'Authorization' = "Bearer 63c9e61cf9ef635338e7bebf41ed2cf0bc36c4ef"
-//   response.success = { resp, reader ->
-//     assert resp.statusLine.statusCode == 200
-//     println "Got response: ${resp.statusLine}"
-//     println "Content-Type: ${resp.headers.'Content-Type'}"
-//     println reader.text
-//   }
-//   response.success = { resp, json ->
-//     println("API response: ${json}")
-//   }
-//   response.'404' = {
-//     println 'Not found'
-//   }
-//  } // end of req
-// }
-
 
 /*
 Check the given git tag exist in the repo or not
