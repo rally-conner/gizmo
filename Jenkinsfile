@@ -4,11 +4,6 @@ import com.rally.Robot
 import com.rally.Git
 import java.text.SimpleDateFormat
 
-import groovyx.net.http.HTTPBuilder
-import static groovyx.net.http.ContentType.URLENC
-import static groovyx.net.http.ContentType.JSON
-import static groovyx.net.http.Method.POST
-import static groovyx.net.http.Method.GET
 
 
 def semverScript = libraryResource 'semver.sh'
@@ -116,6 +111,13 @@ pipeline {
   } // end of stages
 }  // end of pipeline
 
+@Grapes(
+    @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
+)
+
+import groovyx.net.http.HTTPBuilder
+import static groovyx.net.http.ContentType.*
+import static groovyx.net.http.Method.*
 
 def getReleaseNote() {
   def http = new HTTPBuilder()
