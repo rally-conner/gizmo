@@ -55,7 +55,10 @@ pipeline {
           createPypirc()
           sh "git tag"
           sh "pwd"
-          sh "cd ~/"
+          sh "cd ../"
+          sh "pwd"
+          sh "ls"
+          sh "cd ../"
           sh "pwd"
           sh "ls"
         }
