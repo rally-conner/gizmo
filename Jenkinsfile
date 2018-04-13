@@ -10,7 +10,7 @@ def semverScript = libraryResource 'semver.sh'
 def date = new Date()
 def dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
 String runtimeTimeStemp = dateFormat.format(date)
-String serviceName = "gizmo${runtimeTimeStemp}"
+String serviceName = "gizmo"
 Robot robot = new Robot()
 Git git = new Git()
 
@@ -24,7 +24,7 @@ pipeline {
   agent {
     node {
       label 'Pipeline_CI'
-      customWorkspace "${serviceName}"
+      customWorkspace "${serviceName}${runtimeTimeStemp}"
     }
   }
   environment {
