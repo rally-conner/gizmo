@@ -84,7 +84,7 @@ pipeline {
     stage('Publish git tag to github') {
       steps {
         script {
-          git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
+          git.push("${params.BUILD_FOLDER}-${nextGitTagVersion}", "${BUILD_URL}")
         }
       }
       post {
@@ -125,7 +125,6 @@ def createPypirc() {
       echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc
     """, returnStdout: true
     ) == 0
-  sh "cat ~/.pypirc"
 }
 
 
