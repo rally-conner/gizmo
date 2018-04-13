@@ -3,7 +3,7 @@
 import com.rally.Robot
 import com.rally.Git
 import java.text.SimpleDateFormat
-
+package com.rally
 
 
 def semverScript = libraryResource 'semver.sh'
@@ -83,11 +83,20 @@ pipeline {
       }
     } // end of run setup.py and push AF
     stage('Publish git tag to github') {
-     steps {
-       script {
-         git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
-       }
-     }
+      steps {
+        script {
+          git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
+        }
+      }
+      post {
+        success {
+          script: emailext (
+            to: joe.tang@rallyhealth.com,
+            subject: "Build Success",
+            body: "The new Git "
+          )
+        }
+      }
     } // end of Publish git tag to github
   } // end of stages
 }  // end of pipeline
