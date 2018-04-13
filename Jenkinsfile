@@ -95,7 +95,8 @@ pipeline {
             body: """\nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
               Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
               and under folder '${repoNameToBuild}' \n
-              https://github.com/AudaxHealthInc/${serviceName}/tags
+              https://github.com/AudaxHealthInc/${serviceName}/tags \n
+              https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
               """
           )
         }
