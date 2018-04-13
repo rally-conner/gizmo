@@ -3,7 +3,6 @@
 import com.rally.Robot
 import com.rally.Git
 import java.text.SimpleDateFormat
-package com.rally
 
 
 def semverScript = libraryResource 'semver.sh'
