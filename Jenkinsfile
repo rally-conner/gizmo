@@ -62,9 +62,8 @@ pipeline {
     stage ('Get Release Note') {
       steps {
         script {
-          testme = sh "env"
-          println testme
-          testHttp()
+          curlRs = sh "curl --trace-ascii debugdump.txt http://www.example.com/"
+          println curlRs
         }
       }
     }
