@@ -60,6 +60,7 @@ pipeline {
     stage('Get tag version') {
       steps {
         script {
+          sh "git tag -d v2.0.0-shared_library"
           rs = isTagExist("${params.BUILD_FOLDER}")
           if ( !rs ) {
             git.push("v0.0.0-${params.BUILD_FOLDER}", "${BUILD_URL}")
