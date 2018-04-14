@@ -349,7 +349,7 @@ if (artifacts != null && artifacts.size() > 0) { %>
       mimeType: 'text/html',
       to: "${emailRecipients}@rallyhealth.com",
       subject: "${emailSubject}",
-      body: "${emailBody}"
+      body: "${emailBody}",
       recipientProviders: [[$class: 'CulpritsRecipientProvider']]
     )
 }
