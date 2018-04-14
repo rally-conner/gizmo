@@ -88,9 +88,10 @@ pipeline {
           // set up email contents
           recipients = "joe.tang"
           emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-          emailBody = """
+          emailBody = """         
             \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}' 
-            \nYou build type is: ${env.BUILD_TYPE} 
+            \nYour build type is: ${env.BUILD_TYPE} 
+            \nYour release is: ${env.release}
             \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
             \nand under folder '${repoNameToBuild}' 
             \nGit Link: https://github.com/AudaxHealthInc/${serviceName}/tags
@@ -115,6 +116,7 @@ outsite Rally
 */
 def sendEmailNotification(emailRecipients, emailSubject, emailBody) {
     emailext (
+      from: "Jenkins"
       to: "${emailRecipients}@rallyhealth.com",
       subject: "${emailSubject}",
       body: "${emailBody}"
