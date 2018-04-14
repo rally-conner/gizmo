@@ -83,20 +83,21 @@ pipeline {
     } // end of run setup.py and push AF
     stage('Publish git tag to github') {
       steps {
-        String recipients = "joe.tang"
-        String emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-        String emailBody = """
-        \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}' 
-        \nYou build type is: ${env.BUILD_TYPE} 
-        \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
-        \nand under folder '${repoNameToBuild}' 
-        \nhttps://github.com/AudaxHealthInc/${serviceName}/tags
-        \nhttps://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
-        \nGit Link: https://github.com/AudaxHealthInc/${serviceName}/tags
-        \nJenkin Link: https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
-        """
         script {
           git.push("${params.BUILD_FOLDER}-${nextGitTagVersion}", "${BUILD_URL}")
+          // set up email contents
+          recipients = "joe.tang"
+          emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+          emailBody = """
+            \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}' 
+            \nYou build type is: ${env.BUILD_TYPE} 
+            \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
+            \nand under folder '${repoNameToBuild}' 
+            \nhttps://github.com/AudaxHealthInc/${serviceName}/tags
+            \nhttps://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
+            \nGit Link: https://github.com/AudaxHealthInc/${serviceName}/tags
+            \nJenkin Link: https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
+          """
         }
       }
       post {
