@@ -118,8 +118,7 @@ def sendEmailNotification(emailRecipients, emailSubject, emailBody) {
     emailext (
       to: "${emailRecipients}@rallyhealth.com",
       subject: "${emailSubject}",
-      body: "${emailBody}",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+      body: "${emailBody}"
     )
 }
 
