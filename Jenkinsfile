@@ -84,7 +84,7 @@ pipeline {
     stage('Publish git tag to github') {
       steps {
         script {
-          git.push("${params.BUILD_FOLDER}-${nextGitTagVersion}", "${BUILD_URL}")
+          git.push("${nextGitTagVersion}-${params.BUILD_FOLDER}", "${BUILD_URL}")
           // set up email contents
           recipients = "joe.tang"
           emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
@@ -93,8 +93,6 @@ pipeline {
             \nYou build type is: ${env.BUILD_TYPE} 
             \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
             \nand under folder '${repoNameToBuild}' 
-            \nhttps://github.com/AudaxHealthInc/${serviceName}/tags
-            \nhttps://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
             \nGit Link: https://github.com/AudaxHealthInc/${serviceName}/tags
             \nJenkin Link: https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
           """
