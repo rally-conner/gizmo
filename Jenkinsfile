@@ -116,7 +116,6 @@ outsite Rally
 */
 def sendEmailNotification(emailRecipients, emailSubject, emailBody) {
     emailext (
-      from: "${env.USER}",
       to: "${emailRecipients}@rallyhealth.com",
       subject: "${emailSubject}",
       body: "${emailBody}"
