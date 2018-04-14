@@ -89,7 +89,19 @@ pipeline {
       }
       post {
         success {
-          sendEmailNotification("joe.tang")
+          recipients = "joe.tang"
+          emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+          emailBody = "
+            \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'
+            \nYou build type is: ${env.BUILD_TYPE}
+            \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
+            \nand under folder '${repoNameToBuild}'
+            \nhttps://github.com/AudaxHealthInc/${serviceName}/tags
+            \nhttps://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
+            \nGit Link: https://github.com/AudaxHealthInc/${serviceName}/tags \n
+            \nJenkin Link: https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
+          "
+          sendEmailNotification("${recipients}", "${emailSubject}","${emailBody}")
         }
       }
     } // end of Publish git tag to github
@@ -97,22 +109,23 @@ pipeline {
 }  // end of pipeline
 
 
-
-def sendEmailNotification(recipients) {
+/*
+This method will recreate three String parameters. Also
+we hard code the email domain here, so it will not send
+outsite Rally
+*/
+def sendEmailNotification(emailRecipients, emailSubject, emailBody) {
     emailext (
-      to: "${recipients}@rallyhealth.com",
-      subject: "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-      body: """
-      \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}'\n
-        You build type is: ${env.BUILD_TYPE} \n
-        Your new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'\n
-        and under folder '${repoNameToBuild}' \n
-        https://github.com/AudaxHealthInc/${serviceName}/tags \n
-        https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
-      """
+      to: "${emailRecipients}@rallyhealth.com",
+      subject: "${emailSubject}",
+      body: "${emailBody}"
     )
 }
 
+/*
+
+
+*/
 def createPypirc() {
   rs = sh (
     script: """
@@ -127,7 +140,11 @@ def createPypirc() {
     ) == 0
 }
 
+/*
 
+
+
+*/
 def getNextTagNumber(String releaseType, String releaseFolder) {
     tag = sh  (
             script: 'git describe --first-parent --tags --abbrev=0 --match "v[0-9]*"',
