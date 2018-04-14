@@ -89,9 +89,10 @@ pipeline {
       }
       post {
         success {
-          recipients = "joe.tang"
-          emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-          emailBody = """
+          steps {
+            recipients = "joe.tang"
+            emailSubject = "Build Success ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+            emailBody = """
             \nYour New Git Tag is: '${nextGitTagVersion}-${params.BUILD_FOLDER}' 
             \nYou build type is: ${env.BUILD_TYPE} 
             \nYour new Artifacotry file name is: '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'
@@ -102,6 +103,7 @@ pipeline {
             \nJenkin Link: https://rally-jenkins.werally.in/job/rallyhealth-release/job/${serviceName}/${env.BUILD_NUMBER}/ 
           """
           sendEmailNotification("${recipients}", "${emailSubject}","${emailBody}")
+          }
         }
       }
     } // end of Publish git tag to github
