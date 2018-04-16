@@ -1,5 +1,5 @@
 //@Library("pipeline-scripts") _
-@Library("/Users/joe.tang/Source/gizmo/src") _ 
+@Library("gizmo@tool41") _ 
 
 import com.rally.Robot
 import com.rally.Git
