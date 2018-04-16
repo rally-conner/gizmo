@@ -68,17 +68,19 @@ pipeline {
           if ("${params.BUILD_TYPE}" == "SNAPSHOT") {
             repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
+            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", $"${runtimeTimeStemp}") 
           } else {
             repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}"
             artifactoryFolderName = "${params.BUILD_TYPE}"
-        }
+            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", $"${runtimeTimeStemp}")
+          }
        }
-        sh """
-          cd $BUILD_FOLDER
-          sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
-          sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'/\" setup.py
-          python setup.py sdist upload -r rallyhealth
-        """.trim()
+        // sh """
+        //   cd $BUILD_FOLDER
+        //   sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
+        //   sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'/\" setup.py
+        //   python setup.py sdist upload -r rallyhealth
+        // """.trim()
       }
     } // end of run setup.py and push AF
     stage('Publish git tag to github') {
@@ -109,6 +111,18 @@ pipeline {
 }  // end of pipeline
 
 
+def runPythonSetup(repoNameToBuild, nextGitTagVersion, artifactoryFolderName, runtimeTimeStemp) {
+  sh (
+    script: """
+      cd '${env.BUILD_FOLDER}'
+      sed -i -e \"1,/artifactory_repo_name.*/s/artifactory_repo_name.*/artifactory_repo_name = '${repoNameToBuild}'/\" setup.py
+      sed -i -e \"1,/artifactory_version.*/s/artifactory_version.*/artifactory_version = '${nextGitTagVersion}-${artifactoryFolderName}-${runtimeTimeStemp}'/\" setup.py
+      python setup.py sdist upload -r rallyhealth
+    """, returnStatus: true
+    ) == 0
+}
+
+
 /*
 This method will recreate three String parameters. Also
 we hard code the email domain here, so it will not send
@@ -137,7 +151,7 @@ def createPypirc() {
       echo 'repository: https://artifacts.werally.in/artifactory/api/pypi/pypi-release-local' >> ~/.pypirc
       echo 'username: $ARTIFACTORY_USER' >> ~/.pypirc
       echo 'password: $ARTIFACTORY_PASSWORD' >> ~/.pypirc
-    """, returnStdout: true
+    """, returnStatus: true
     ) == 0
 }
 
