@@ -72,7 +72,7 @@ pipeline {
           } else {
             repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}"
             artifactoryFolderName = "${params.BUILD_TYPE}"
-            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", $"${runtimeTimeStemp}")
+            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", "${runtimeTimeStemp}")
           }
        }
         // sh """
