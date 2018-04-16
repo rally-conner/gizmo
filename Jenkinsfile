@@ -68,7 +68,7 @@ pipeline {
           if ("${params.BUILD_TYPE}" == "SNAPSHOT") {
             repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}_${params.BUILD_TYPE}"
             artifactoryFolderName = "${params.BUILD_FOLDER}-${params.BUILD_TYPE}"
-            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", $"${runtimeTimeStemp}") 
+            runPythonSetup("${repoNameToBuild}", "${nextGitTagVersion}", "${artifactoryFolderName}", "${runtimeTimeStemp}") 
           } else {
             repoNameToBuild = "${serviceName}_${params.BUILD_FOLDER}"
             artifactoryFolderName = "${params.BUILD_TYPE}"
